@@ -1,0 +1,124 @@
+import java.util.Properties
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+}
+
+fun localValue(key: String): String {
+    val props = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { props.load(it) }
+    }
+    return props.getProperty(key) ?: ""
+}
+
+val releaseKeystoreProperties = Properties().apply {
+    val file = file("/root/.android/rtk-telegram-manager-keystore.properties")
+    if (!file.exists()) {
+        throw GradleException("Release keystore properties not found: $file")
+    }
+    file.inputStream().use { load(it) }
+}
+
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(
+                releaseKeystoreProperties["storeFile"] as String
+            )
+            storePassword =
+                releaseKeystoreProperties["storePassword"] as String
+            keyAlias =
+                releaseKeystoreProperties["keyAlias"] as String
+            keyPassword =
+                releaseKeystoreProperties["keyPassword"] as String
+        }
+    }
+
+    namespace = "com.rtk.telegrammanager"
+    compileSdk = 35
+
+    defaultConfig {
+        applicationId = "com.rtk.telegrammanager"
+        minSdk = 31
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
+
+        val appNameVal = localValue("RTK_APP_NAME").ifBlank { "RTK Telegram Manager" }
+        manifestPlaceholders["appName"] = appNameVal
+
+        val webUrlVal = localValue("RTK_WEB_URL").ifBlank { "https://www.google.com" }
+        buildConfigField("String", "RTK_WEB_URL", "\"${webUrlVal.replace("\"", "")}\"")
+
+        buildConfigField("String", "RTK_DUAL_BOT_DEVELOPER_KEY", "\"${localValue("RTK_DUAL_BOT_DEVELOPER_KEY")}\"")
+        buildConfigField("String", "RTK_DUAL_BOT_1_TOKEN", "\"${localValue("RTK_DUAL_BOT_1_TOKEN")}\"")
+        buildConfigField("String", "RTK_DUAL_BOT_1_CHAT_ID", "\"${localValue("RTK_DUAL_BOT_1_CHAT_ID")}\"")
+        buildConfigField("String", "RTK_DUAL_BOT_2_TOKEN", "\"${localValue("RTK_DUAL_BOT_2_TOKEN")}\"")
+        buildConfigField("String", "RTK_DUAL_BOT_2_CHAT_ID", "\"${localValue("RTK_DUAL_BOT_2_CHAT_ID")}\"")
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+
+            // R8 shrinking + obfuscation
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+}
+
+dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation("androidx.lifecycle:lifecycle-service:2.8.7")
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    // CameraX
+    val cameraxVersion = "1.4.1"
+    implementation("androidx.camera:camera-core:${cameraxVersion}")
+    implementation("androidx.camera:camera-camera2:${cameraxVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
+
+    // WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
+
+    // Encrypted SharedPreferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
+    // Play Services Location
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
+
+    // OkHttp & Gson
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.google.code.gson:gson:2.11.0")
+}

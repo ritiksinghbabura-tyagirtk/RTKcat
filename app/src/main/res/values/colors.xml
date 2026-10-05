@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="rtk_primary">#6750A4</color>
+    <color name="rtk_secondary">#625B71</color>
+    <color name="rtk_background">#F9F7FC</color>
+    <color name="rtk_surface">#FFFFFF</color>
+
+</resources>

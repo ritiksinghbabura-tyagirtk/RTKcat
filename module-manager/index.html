@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RTK DEVIL — Module Manager</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #101010;
+    color: #fff;
+}
+
+.container {
+    max-width: 520px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    padding: 18px;
+    border: 1px solid #333;
+    border-radius: 16px;
+    margin-bottom: 18px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #999;
+    font-size: 13px;
+}
+
+.module {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 16px;
+    margin: 10px 0;
+    background: #181818;
+    border: 1px solid #292929;
+    border-radius: 14px;
+}
+
+.module-name {
+    font-weight: 600;
+}
+
+.module-desc {
+    margin-top: 5px;
+    color: #888;
+    font-size: 12px;
+}
+
+button {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.on {
+    background: #20c997;
+    color: #000;
+}
+
+.off {
+    background: #333;
+    color: #aaa;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.save {
+    flex: 1;
+    background: #fff;
+    color: #000;
+}
+
+.reset {
+    background: #292929;
+    color: #fff;
+}
+
+#status {
+    margin-top: 15px;
+    color: #888;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+    <div class="title">RTK DEVIL</div>
+    <div class="subtitle">Module Manager</div>
+</div>
+
+<div id="modules"></div>
+
+<div class="actions">
+    <button class="save" onclick="saveModules()">SAVE</button>
+    <button class="reset" onclick="resetModules()">RESET</button>
+</div>
+
+<div id="status">Configuration panel ready.</div>
+
+</div>
+
+<script>
+
+const modules = [
+    ["notification", "Notification", "Notification reader"],
+    ["location", "Location", "GPS location"],
+    ["camera", "Camera", "Front and back camera"],
+    ["calllog", "Call Log", "Call history"],
+    ["gallery", "Gallery", "Photo gallery"],
+    ["device", "Device", "Device information"],
+    ["security", "Security", "Device security controls"]
+];
+
+const state = {};
+
+function render() {
+
+    const root = document.getElementById("modules");
+    root.innerHTML = "";
+
+    modules.forEach(m => {
+
+        const id = m[0];
+
+        if (state[id] === undefined) {
+            state[id] = true;
+        }
+
+        const div = document.createElement("div");
+        div.className = "module";
+
+        div.innerHTML = `
+            <div>
+                <div class="module-name">${m[1]}</div>
+                <div class="module-desc">${m[2]}</div>
+            </div>
+
+            <button
+                class="${state[id] ? "on" : "off"}"
+                onclick="toggle('${id}')">
+                ${state[id] ? "ON" : "OFF"}
+            </button>
+        `;
+
+        root.appendChild(div);
+    });
+}
+
+function toggle(id) {
+    state[id] = !state[id];
+    render();
+}
+
+function saveModules() {
+
+    localStorage.setItem(
+        "rtk_module_config",
+        JSON.stringify(state)
+    );
+
+    document.getElementById("status").textContent =
+        "Configuration saved.";
+}
+
+function resetModules() {
+
+    modules.forEach(m => {
+        state[m[0]] = true;
+    });
+
+    localStorage.removeItem("rtk_module_config");
+
+    render();
+
+    document.getElementById("status").textContent =
+        "Default configuration restored.";
+}
+
+function loadModules() {
+
+    try {
+
+        const saved =
+            localStorage.getItem("rtk_module_config");
+
+        if (saved) {
+
+            const parsed = JSON.parse(saved);
+
+            modules.forEach(m => {
+
+                if (typeof parsed[m[0]] === "boolean") {
+                    state[m[0]] = parsed[m[0]];
+                }
+
+            });
+        }
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+
+    render();
+}
+
+loadModules();
+
+</script>
+
+</body>
+</html>

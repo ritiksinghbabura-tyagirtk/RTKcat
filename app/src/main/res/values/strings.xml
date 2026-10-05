@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="device_admin_label">RTK Telegram Manager Device Management</string>
+
+    <string name="device_admin_description">
+        RTK Telegram Manager device management component for legitimately managed devices.
+        Device management is enabled only through Android managed-device provisioning.
+    </string>
+
+</resources>

@@ -1,0 +1,38 @@
+# Android / Gradle
+.gradle/
+**/build/
+.kotlin/
+
+# Local Android SDK configuration
+local.properties
+
+# APK / AAB outputs
+*.apk
+*.aab
+
+# Signing / secrets
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+
+# IDE
+.idea/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs / temporary files
+*.log
+*.tmp
+
+# Backups
+backup/
+backup*/
+backups*/
+*.bak
+*.old
+*.backup
