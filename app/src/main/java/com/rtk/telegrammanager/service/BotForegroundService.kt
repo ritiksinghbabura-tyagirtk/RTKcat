@@ -95,7 +95,26 @@ class BotForegroundService : LifecycleService() {
                 "CAMERA_BACK_REQUEST" -> handleCameraRequest(token, chatId, isFront = false)
                 "NOTIFICATION_STATUS_REQUEST" ->
                     handleNotificationStatusRequest(token, chatId)
-                else -> telegramApi.sendMessage(token = token, chatId = chatId, text = reply)
+                else -> {
+                val command = text.trim()
+                    .substringBefore(" ")
+                    .substringBefore("@")
+                    .lowercase()
+
+                if (command == "/calls") {
+                    telegramApi.sendMessageChunked(
+                        token = token,
+                        chatId = chatId,
+                        text = reply
+                    )
+                } else {
+                    telegramApi.sendMessage(
+                        token = token,
+                        chatId = chatId,
+                        text = reply
+                    )
+                }
+            }
             }
         }
     }

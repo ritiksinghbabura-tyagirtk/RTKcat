@@ -90,6 +90,59 @@ class TelegramApi {
             }
         }
 
+    /*
+     * Sends long Telegram text safely in multiple messages.
+     *
+     * Telegram text messages have a per-message size limit.
+     * This keeps each chunk below that limit and prefers
+     * splitting at line boundaries.
+     */
+    suspend fun sendMessageChunked(
+        token: String,
+        chatId: String,
+        text: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+
+        runCatching {
+
+            val maxChunkSize = 3500
+            var remaining = text
+
+            while (remaining.isNotEmpty()) {
+
+                val chunk: String
+
+                if (remaining.length <= maxChunkSize) {
+                    chunk = remaining
+                    remaining = ""
+                } else {
+
+                    var cut = remaining.lastIndexOf(
+                        '\n',
+                        maxChunkSize
+                    )
+
+                    if (cut <= 0) {
+                        cut = maxChunkSize
+                    }
+
+                    chunk = remaining.substring(0, cut).trimEnd()
+
+                    remaining = remaining
+                        .substring(cut)
+                        .trimStart('\n', '\r')
+                }
+
+                sendMessage(
+                    token = token,
+                    chatId = chatId,
+                    text = chunk
+                ).getOrThrow()
+            }
+        }
+    }
+
+
     suspend fun sendMessage(
         token: String,
         chatId: String,

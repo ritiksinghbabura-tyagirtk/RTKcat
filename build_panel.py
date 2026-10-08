@@ -579,116 +579,972 @@ def build_apk(values):
 
 HTML = r"""
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RTK Telegram APK Builder</title>
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#08090f">
+
+<title>RTK Devil • Telegram APK Builder</title>
 
 <style>
+
+:root {
+    --bg: #07080d;
+    --bg2: #0d0f18;
+    --card: rgba(18, 20, 31, .88);
+    --card2: rgba(25, 27, 40, .92);
+    --border: rgba(255,255,255,.09);
+    --text: #f5f7ff;
+    --muted: #9299ad;
+    --red: #ff304f;
+    --red2: #ff5b72;
+    --purple: #8b5cf6;
+    --cyan: #22d3ee;
+    --green: #22c55e;
+    --yellow: #facc15;
+    --danger: #ef4444;
+    --shadow: 0 20px 70px rgba(0,0,0,.45);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
     margin: 0;
-    padding: 20px;
+    min-height: 100vh;
+    color: var(--text);
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(255,48,79,.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(139,92,246,.20),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(34,211,238,.08),
+            transparent 35%
+        ),
+        var(--bg);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .035;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.5) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.5) 1px,
+            transparent 1px
+        );
+
+    background-size: 34px 34px;
 }
 
 .container {
-    max-width: 850px;
-    margin: auto;
+    width: min(980px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 24px 0 60px;
 }
+
+/* ---------- HERO ---------- */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 28px;
+    margin-bottom: 18px;
+
+    border: 1px solid var(--border);
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,48,79,.12),
+            rgba(139,92,246,.08) 48%,
+            rgba(34,211,238,.05)
+        ),
+        rgba(13,15,24,.86);
+
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(20px);
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    right: -100px;
+    top: -110px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,48,79,.34),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--red),
+            var(--purple)
+        );
+
+    box-shadow:
+        0 0 30px rgba(255,48,79,.22);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.eyebrow {
+    margin: 0 0 3px;
+
+    color: var(--red2);
+
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .20em;
+}
+
+.hero h1 {
+    margin: 0;
+
+    font-size: clamp(25px, 5vw, 38px);
+    line-height: 1.05;
+    letter-spacing: -.035em;
+}
+
+.hero p {
+    margin: 17px 0 0;
+
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.local-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-top: 18px;
+    padding: 8px 11px;
+
+    border: 1px solid rgba(34,197,94,.18);
+    border-radius: 999px;
+
+    background: rgba(34,197,94,.07);
+
+    color: #9af7b7;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.local-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(34,197,94,.7);
+}
+
+/* ---------- CARDS ---------- */
 
 .card {
-    background: white;
-    border-radius: 14px;
-    padding: 22px;
     margin-bottom: 18px;
-    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    padding: 22px;
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(25,27,40,.90),
+            rgba(13,15,24,.88)
+        );
+
+    box-shadow:
+        0 12px 40px rgba(0,0,0,.20);
+
+    backdrop-filter: blur(18px);
 }
 
-h1 {
-    margin-top: 0;
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.section-left {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.section-icon {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,48,79,.17),
+            rgba(139,92,246,.16)
+        );
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    font-size: 17px;
+}
+
+.section-title {
+    margin: 0;
+
+    font-size: 17px;
+    font-weight: 850;
+}
+
+.section-subtitle {
+    margin: 4px 0 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.card-tag {
+    padding: 6px 9px;
+
+    border: 1px solid var(--border);
+    border-radius: 999px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .08em;
+}
+
+/* ---------- FORM ---------- */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
 }
 
 label {
     display: block;
-    font-weight: 600;
-    margin-top: 15px;
-    margin-bottom: 6px;
+
+    margin: 0 0 7px;
+
+    color: #d9ddea;
+
+    font-size: 12px;
+    font-weight: 750;
 }
 
 input {
     width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    border: 1px solid #ccd2d8;
-    border-radius: 8px;
-    font-size: 15px;
+    min-height: 47px;
+
+    padding: 12px 13px;
+
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 11px;
+    outline: none;
+
+    background:
+        rgba(5,7,13,.68);
+
+    color: var(--text);
+
+    font: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
 }
 
-button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
-    border: 0;
-    border-radius: 9px;
-    background: #111827;
-    color: white;
-    font-size: 16px;
-    font-weight: 700;
+input::placeholder {
+    color: #62697c;
+}
+
+input:hover {
+    border-color: rgba(255,255,255,.17);
+}
+
+input:focus {
+    border-color: rgba(255,48,79,.65);
+
+    background:
+        rgba(8,10,18,.92);
+
+    box-shadow:
+        0 0 0 3px rgba(255,48,79,.09),
+        0 0 24px rgba(255,48,79,.08);
+}
+
+input[type="file"] {
+    padding: 9px;
     cursor: pointer;
 }
 
-button:disabled {
-    opacity: .5;
+input[type="file"]::file-selector-button {
+    margin-right: 10px;
+
+    padding: 8px 11px;
+
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 8px;
+
+    background: #191c29;
+    color: #e9ecf7;
+
+    cursor: pointer;
 }
 
-pre {
-    background: #111827;
-    color: #e5e7eb;
-    padding: 15px;
-    border-radius: 10px;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-word;
-    min-height: 160px;
+.secret-wrap {
+    position: relative;
+}
+
+.secret-wrap input {
+    padding-right: 75px;
+}
+
+.show-btn {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+
+    width: auto;
+    min-width: 58px;
+    height: 33px;
+
+    margin: 0;
+    padding: 0 9px;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 8px;
+
+    background: #171a27;
+    color: #cbd1e2;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.show-btn:hover {
+    background: #222638;
+    color: white;
+}
+
+/* ---------- BOT ---------- */
+
+.bot-card {
+    position: relative;
+}
+
+.bot-card.bot1 {
+    border-color: rgba(255,48,79,.16);
+}
+
+.bot-card.bot2 {
+    border-color: rgba(139,92,246,.18);
+}
+
+.bot-number {
+    display: inline-grid;
+    place-items: center;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--red),
+            var(--purple)
+        );
+
+    color: white;
+
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.bot-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    margin-top: 17px;
+}
+
+.saved-state {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #777f94;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.saved-state.saved {
+    color: #86efac;
+}
+
+.saved-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #596074;
+}
+
+.saved-state.saved .saved-dot {
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(34,197,94,.6);
+}
+
+.small-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.small-btn {
+    width: auto;
+    min-height: 36px;
+
+    margin: 0;
+    padding: 0 13px;
+
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 9px;
+
+    background: #171a27;
+    color: #dce1ee;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.small-btn.save {
+    border-color: rgba(255,48,79,.24);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,48,79,.16),
+            rgba(139,92,246,.13)
+        );
+}
+
+.small-btn:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255,255,255,.20);
+}
+
+/* ---------- MEMORY BAR ---------- */
+
+.memory-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 13px 14px;
+
+    border: 1px solid rgba(139,92,246,.14);
+    border-radius: 12px;
+
+    background: rgba(139,92,246,.055);
+}
+
+.memory-copy strong {
+    display: block;
+    font-size: 12px;
+}
+
+.memory-copy span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.clear-all {
+    flex: 0 0 auto;
+
+    padding: 8px 10px;
+
+    border: 1px solid rgba(239,68,68,.18);
+    border-radius: 8px;
+
+    background: rgba(239,68,68,.07);
+    color: #fca5a5;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+/* ---------- BUILD ---------- */
+
+.build-card {
+    overflow: hidden;
+
+    border-color: rgba(255,48,79,.18);
+
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(255,48,79,.10),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(139,92,246,.10),
+            transparent 45%
+        ),
+        rgba(13,15,24,.90);
+}
+
+#buildButton {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    min-height: 58px;
+
+    margin: 0;
+    padding: 0 20px;
+
+    border: 0;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            110deg,
+            #ff304f,
+            #e82f62 45%,
+            #8b5cf6
+        );
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: .04em;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 35px rgba(255,48,79,.18);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease,
+        opacity .18s ease;
+}
+
+#buildButton::after {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: -100%;
+
+    width: 70%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.20),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    animation: shine 4s infinite;
+}
+
+@keyframes shine {
+    0%, 55% {
+        left: -100%;
+    }
+
+    75%, 100% {
+        left: 140%;
+    }
+}
+
+#buildButton:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 42px rgba(255,48,79,.25);
+}
+
+#buildButton:disabled {
+    opacity: .55;
+    transform: none;
+    cursor: wait;
+}
+
+/* ---------- STATUS ---------- */
+
+.status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 13px;
 }
 
 .status {
-    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 7px 11px;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.035);
+
+    color: #cbd1df;
+
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+}
+
+.status::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #737b8f;
+}
+
+.status[data-state="building"] {
+    color: #fde68a;
+}
+
+.status[data-state="building"]::before {
+    background: var(--yellow);
+    box-shadow: 0 0 12px rgba(250,204,21,.65);
+    animation: pulse 1s infinite;
+}
+
+.status[data-state="success"] {
+    color: #86efac;
+    border-color: rgba(34,197,94,.18);
+}
+
+.status[data-state="success"]::before {
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(34,197,94,.65);
+}
+
+.status[data-state="failed"] {
+    color: #fca5a5;
+    border-color: rgba(239,68,68,.18);
+}
+
+.status[data-state="failed"]::before {
+    background: var(--danger);
+    box-shadow: 0 0 12px rgba(239,68,68,.65);
+}
+
+@keyframes pulse {
+    50% {
+        opacity: .35;
+    }
+}
+
+.console {
+    position: relative;
+
+    min-height: 230px;
+    max-height: 500px;
+
+    margin: 0;
+
+    padding: 17px;
+
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 13px;
+
+    background:
+        #05070b;
+
+    color: #cbd5e1;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 11px;
+    line-height: 1.65;
+
+    overflow: auto;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    box-shadow:
+        inset 0 0 40px rgba(0,0,0,.30);
+}
+
+.console::before {
+    content: "RTK BUILD CONSOLE";
+
+    position: sticky;
+    top: -17px;
+
+    display: block;
+
+    margin: -17px -17px 14px;
+    padding: 9px 13px;
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+
+    background: rgba(10,12,18,.95);
+
+    color: #777f94;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: .14em;
 }
 
 .download {
-    display: none;
-    text-align: center;
+    margin-top: 14px;
+
     padding: 15px;
-    border-radius: 9px;
-    background: #ecfdf5;
+
+    border: 1px solid rgba(34,197,94,.18);
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34,197,94,.08),
+            rgba(34,211,238,.04)
+        );
+
+    text-align: center;
 }
 
 .download a {
-    display: inline-block;
-    padding: 12px 22px;
-    border-radius: 8px;
-    background: #111827;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 45px;
+
+    padding: 0 19px;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #059669
+        );
+
     color: white;
-    font-weight: 700;
+
+    font-size: 13px;
+    font-weight: 900;
+
     text-decoration: none;
-    cursor: pointer;
+
+    box-shadow:
+        0 10px 28px rgba(16,185,129,.16);
 }
 
-.warning {
-    background: #fff7ed;
-    border-left: 4px solid #f97316;
-    padding: 12px;
-    margin-top: 15px;
+.download a:hover {
+    transform: translateY(-1px);
 }
 
-.section-title {
-    margin-top: 0;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
+/* ---------- FOOTER ---------- */
+
+.footer {
+    padding: 5px 0;
+
+    color: #596074;
+
+    text-align: center;
+
+    font-size: 10px;
+    line-height: 1.7;
 }
+
+.footer strong {
+    color: #777f94;
+}
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 700px) {
+
+    .container {
+        width: min(100% - 16px, 980px);
+        padding-top: 9px;
+        padding-bottom: 30px;
+    }
+
+    .hero,
+    .card {
+        border-radius: 17px;
+    }
+
+    .hero {
+        padding: 21px 18px;
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .card-header {
+        margin-bottom: 16px;
+    }
+
+    .bot-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .small-actions {
+        width: 100%;
+    }
+
+    .small-btn {
+        flex: 1;
+    }
+
+    .memory-bar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .clear-all {
+        width: 100%;
+    }
+
+    .console {
+        min-height: 210px;
+        max-height: 420px;
+        font-size: 10px;
+    }
+}
+
 </style>
 </head>
 
@@ -696,286 +1552,1303 @@ pre {
 
 <div class="container">
 
-<div class="card">
-<h1>RTK Telegram APK Builder</h1>
+<!-- HERO -->
 
-<p>
-Build a configured signed release APK directly from this browser.
-</p>
+<div class="hero">
 
-<div class="warning">
-This builder listens only on localhost.
-Bot credentials are written to local.properties on this machine.
-</div>
-</div>
+    <div class="brand">
 
-<form id="buildForm"
-      enctype="multipart/form-data">
+        <div class="logo">⚡</div>
 
-<div class="card">
+        <div>
+            <p class="eyebrow">RTK DEVIL DEPARTMENT</p>
+            <h1>Telegram APK Builder</h1>
+        </div>
 
-<h2 class="section-title">APK Settings</h2>
+    </div>
 
-<label>APK File Name</label>
-<input
-    name="apk_name"
-    value="RTKTelegramManager"
-    maxlength="80">
+    <p>
+        Configure your Android application, connect both Telegram bots,
+        and build a verified signed release APK directly from this device.
+    </p>
 
-<label>App Name</label>
-<input
-    name="app_name"
-    placeholder="RTK Telegram Manager"
-    required>
-
-<label>Target Web URL</label>
-<input
-    name="web_url"
-    type="url"
-    placeholder="https://example.com"
-    required>
-
-<label>App Icon</label>
-<input
-    name="app_icon"
-    type="file"
-    accept="image/png,image/jpeg,image/webp">
+    <div class="local-badge">
+        <span class="local-dot"></span>
+        LOCAL ONLY • 127.0.0.1 • CREDENTIALS STAY ON THIS DEVICE
+    </div>
 
 </div>
 
+<form id="buildForm" enctype="multipart/form-data">
+
+<!-- APK -->
+
 <div class="card">
 
-<h2 class="section-title">Developer</h2>
+    <div class="card-header">
 
-<label>Developer Key</label>
-<input
-    name="developer_key"
-    type="password"
-    required>
+        <div class="section-left">
+
+            <div class="section-icon">📦</div>
+
+            <div>
+                <h2 class="section-title">APK Configuration</h2>
+                <p class="section-subtitle">
+                    Application identity and release settings
+                </p>
+            </div>
+
+        </div>
+
+        <div class="card-tag">APP</div>
+
+    </div>
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>APK File Name</label>
+
+            <input
+                name="apk_name"
+                value="RTKTelegramManager"
+                maxlength="80"
+                autocomplete="off">
+
+        </div>
+
+        <div class="field">
+
+            <label>App Name</label>
+
+            <input
+                name="app_name"
+                placeholder="RTK Telegram Manager"
+                maxlength="80"
+                autocomplete="organization"
+                required>
+
+        </div>
+
+        <div class="field full">
+
+            <label>Target Web URL</label>
+
+            <input
+                name="web_url"
+                type="url"
+                placeholder="https://example.com"
+                autocomplete="url"
+                required>
+
+        </div>
+
+        <div class="field full">
+
+            <label>App Icon</label>
+
+            <input
+                name="app_icon"
+                type="file"
+                accept="image/png,image/jpeg,image/webp">
+
+        </div>
+
+    </div>
 
 </div>
 
+<!-- DEVELOPER -->
+
 <div class="card">
 
-<h2 class="section-title">Bot 1</h2>
+    <div class="card-header">
 
-<label>Bot Name</label>
-<input name="bot1_name">
+        <div class="section-left">
 
-<label>Bot Token</label>
-<input
-    name="bot1_token"
-    type="password"
-    required>
+            <div class="section-icon">🔐</div>
 
-<label>Bot Chat ID</label>
-<input
-    name="bot1_chat_id"
-    required>
+            <div>
+                <h2 class="section-title">Developer Authentication</h2>
+                <p class="section-subtitle">
+                    Developer key used by the generated application
+                </p>
+            </div>
+
+        </div>
+
+        <div class="card-tag">SECURE</div>
+
+    </div>
+
+    <div class="field">
+
+        <label>Developer Key</label>
+
+        <div class="secret-wrap">
+
+            <input
+                id="developerKey"
+                name="developer_key"
+                type="password"
+                autocomplete="off"
+                required>
+
+            <button
+                class="show-btn"
+                type="button"
+                data-target="developerKey">
+                SHOW
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
-<div class="card">
+<!-- BOT 1 -->
 
-<h2 class="section-title">Bot 2</h2>
+<div class="card bot-card bot1">
 
-<label>Bot Name</label>
-<input name="bot2_name">
+    <div class="card-header">
 
-<label>Bot Token</label>
-<input
-    name="bot2_token"
-    type="password"
-    required>
+        <div class="section-left">
 
-<label>Bot Chat ID</label>
-<input
-    name="bot2_chat_id"
-    required>
+            <div class="bot-number">01</div>
+
+            <div>
+                <h2 class="section-title">Telegram Bot 01</h2>
+                <p class="section-subtitle">
+                    Primary bot configuration
+                </p>
+            </div>
+
+        </div>
+
+        <div class="card-tag">BOT 01</div>
+
+    </div>
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>Bot Name</label>
+
+            <input
+                id="bot1Name"
+                name="bot1_name"
+                placeholder="Primary Bot"
+                autocomplete="off">
+
+        </div>
+
+        <div class="field">
+
+            <label>Bot Chat ID</label>
+
+            <input
+                id="bot1ChatId"
+                name="bot1_chat_id"
+                placeholder="123456789"
+                autocomplete="off"
+                required>
+
+        </div>
+
+        <div class="field full">
+
+            <label>Bot Token</label>
+
+            <div class="secret-wrap">
+
+                <input
+                    id="bot1Token"
+                    name="bot1_token"
+                    type="password"
+                    placeholder="123456789:AA..."
+                    autocomplete="off"
+                    required>
+
+                <button
+                    class="show-btn"
+                    type="button"
+                    data-target="bot1Token">
+                    SHOW
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bot-actions">
+
+        <div
+            id="bot1Saved"
+            class="saved-state">
+
+            <span class="saved-dot"></span>
+            <span>Not saved</span>
+
+        </div>
+
+        <div class="small-actions">
+
+            <button
+                id="saveBot1"
+                class="small-btn save"
+                type="button">
+                💾 SAVE BOT 01
+            </button>
+
+            <button
+                id="clearBot1"
+                class="small-btn"
+                type="button">
+                CLEAR
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
+<!-- BOT 2 -->
+
+<div class="card bot-card bot2">
+
+    <div class="card-header">
+
+        <div class="section-left">
+
+            <div class="bot-number">02</div>
+
+            <div>
+                <h2 class="section-title">Telegram Bot 02</h2>
+                <p class="section-subtitle">
+                    Secondary bot configuration
+                </p>
+            </div>
+
+        </div>
+
+        <div class="card-tag">BOT 02</div>
+
+    </div>
+
+    <div class="form-grid">
+
+        <div class="field">
+
+            <label>Bot Name</label>
+
+            <input
+                id="bot2Name"
+                name="bot2_name"
+                placeholder="Secondary Bot"
+                autocomplete="off">
+
+        </div>
+
+        <div class="field">
+
+            <label>Bot Chat ID</label>
+
+            <input
+                id="bot2ChatId"
+                name="bot2_chat_id"
+                placeholder="123456789"
+                autocomplete="off"
+                required>
+
+        </div>
+
+        <div class="field full">
+
+            <label>Bot Token</label>
+
+            <div class="secret-wrap">
+
+                <input
+                    id="bot2Token"
+                    name="bot2_token"
+                    type="password"
+                    placeholder="123456789:AA..."
+                    autocomplete="off"
+                    required>
+
+                <button
+                    class="show-btn"
+                    type="button"
+                    data-target="bot2Token">
+                    SHOW
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bot-actions">
+
+        <div
+            id="bot2Saved"
+            class="saved-state">
+
+            <span class="saved-dot"></span>
+            <span>Not saved</span>
+
+        </div>
+
+        <div class="small-actions">
+
+            <button
+                id="saveBot2"
+                class="small-btn save"
+                type="button">
+                💾 SAVE BOT 02
+            </button>
+
+            <button
+                id="clearBot2"
+                class="small-btn"
+                type="button">
+                CLEAR
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MEMORY -->
+
 <div class="card">
 
-<button id="buildButton" type="submit">
-BUILD SIGNED APK
-</button>
+    <div class="memory-bar">
+
+        <div class="memory-copy">
+
+            <strong>💾 Browser Configuration Memory</strong>
+
+            <span>
+                Saved Bot 01, Bot 02 and developer settings are restored
+                automatically when this local builder is opened again.
+            </span>
+
+        </div>
+
+        <button
+            id="clearAll"
+            class="clear-all"
+            type="button">
+            CLEAR SAVED DATA
+        </button>
+
+    </div>
+
+</div>
+
+<!-- BUILD -->
+
+<div class="card build-card">
+
+    <div class="card-header">
+
+        <div class="section-left">
+
+            <div class="section-icon">⚡</div>
+
+            <div>
+                <h2 class="section-title">Release Build</h2>
+                <p class="section-subtitle">
+                    Build, sign and verify the release APK
+                </p>
+            </div>
+
+        </div>
+
+        <div class="card-tag">GRADLE</div>
+
+    </div>
+
+    <button
+        id="buildButton"
+        type="submit">
+        ⚡ BUILD SIGNED APK
+    </button>
 
 </div>
 
 </form>
 
+<!-- STATUS -->
+
 <div class="card">
 
-<h2 class="section-title">Build Status</h2>
+    <div class="status-row">
 
-<div id="status" class="status">
-Ready
+        <div>
+
+            <h2 class="section-title">Build Console</h2>
+
+            <p class="section-subtitle">
+                Live Gradle and APK verification output
+            </p>
+
+        </div>
+
+        <div
+            id="status"
+            class="status"
+            data-state="idle">
+            READY
+        </div>
+
+    </div>
+
+    <pre id="log" class="console"></pre>
+
+    <div
+        id="download"
+        class="download">
+
+        <a
+            id="downloadLink"
+            href="/download"
+            download>
+            ⬇ DOWNLOAD VERIFIED APK
+        </a>
+
+    </div>
+
 </div>
 
-<pre id="log"></pre>
-
-<div id="download" class="download">
-    <a id="downloadLink"
-       href="/download"
-       download>
-        ⬇ Download APK
-    </a>
-</div>
-
+<div class="footer">
+    <strong>RTK DEVIL</strong> • Local Android Release Builder
+    <br>
+    No remote build service • Credentials are not sent to the internet
 </div>
 
 </div>
 
 <script>
 
-const form = document.getElementById("buildForm");
-const button = document.getElementById("buildButton");
-const statusBox = document.getElementById("status");
-const logBox = document.getElementById("log");
-const downloadBox = document.getElementById("download");
-const downloadLink = document.getElementById("downloadLink");
+const form =
+    document.getElementById("buildForm");
+
+const button =
+    document.getElementById("buildButton");
+
+const statusBox =
+    document.getElementById("status");
+
+const logBox =
+    document.getElementById("log");
+
+const downloadBox =
+    document.getElementById("download");
+
+const downloadLink =
+    document.getElementById("downloadLink");
+
+const STORAGE_KEY =
+    "rtk.telegram.builder.v2";
+
+/*
+ * ---------------------------------------------------------
+ * STORAGE
+ * ---------------------------------------------------------
+ *
+ * Browser localStorage is used intentionally.
+ *
+ * This builder is bound to 127.0.0.1, so saved configuration
+ * stays inside this browser profile on this device.
+ *
+ * Nothing is sent to a remote server by this feature.
+ */
+
+function getSavedData() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!raw) {
+            return {};
+        }
+
+        return JSON.parse(raw) || {};
+
+    } catch (error) {
+
+        console.warn(
+            "Saved configuration could not be read.",
+            error
+        );
+
+        return {};
+    }
+}
+
+function setSavedData(data) {
+
+    try {
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(data)
+        );
+
+        return true;
+
+    } catch (error) {
+
+        console.warn(
+            "Configuration could not be saved.",
+            error
+        );
+
+        return false;
+    }
+}
+
+function saveSection(section, values) {
+
+    const data =
+        getSavedData();
+
+    data[section] = values;
+
+    data.savedAt =
+        new Date().toISOString();
+
+    return setSavedData(data);
+}
+
+function clearSection(section) {
+
+    const data =
+        getSavedData();
+
+    delete data[section];
+
+    setSavedData(data);
+}
+
+function markSaved(id, saved) {
+
+    const box =
+        document.getElementById(id);
+
+    if (!box) {
+        return;
+    }
+
+    if (saved) {
+
+        box.classList.add("saved");
+
+        box.querySelector("span:last-child")
+            .textContent = "Saved on this device";
+
+    } else {
+
+        box.classList.remove("saved");
+
+        box.querySelector("span:last-child")
+            .textContent = "Not saved";
+    }
+}
+
+/*
+ * ---------------------------------------------------------
+ * RESTORE CONFIGURATION
+ * ---------------------------------------------------------
+ */
+
+function restoreConfiguration() {
+
+    const data =
+        getSavedData();
+
+    if (data.app) {
+
+        const appName =
+            form.elements["app_name"];
+
+        const webUrl =
+            form.elements["web_url"];
+
+        const apkName =
+            form.elements["apk_name"];
+
+        if (data.app.app_name !== undefined) {
+            appName.value = data.app.app_name;
+        }
+
+        if (data.app.web_url !== undefined) {
+            webUrl.value = data.app.web_url;
+        }
+
+        if (data.app.apk_name !== undefined) {
+            apkName.value = data.app.apk_name;
+        }
+    }
+
+    if (data.developer) {
+
+        const developer =
+            document.getElementById("developerKey");
+
+        if (data.developer.key) {
+            developer.value =
+                data.developer.key;
+        }
+    }
+
+    if (data.bot1) {
+
+        document.getElementById("bot1Name").value =
+            data.bot1.name || "";
+
+        document.getElementById("bot1Token").value =
+            data.bot1.token || "";
+
+        document.getElementById("bot1ChatId").value =
+            data.bot1.chat_id || "";
+
+        markSaved("bot1Saved", true);
+    }
+
+    if (data.bot2) {
+
+        document.getElementById("bot2Name").value =
+            data.bot2.name || "";
+
+        document.getElementById("bot2Token").value =
+            data.bot2.token || "";
+
+        document.getElementById("bot2ChatId").value =
+            data.bot2.chat_id || "";
+
+        markSaved("bot2Saved", true);
+    }
+}
+
+/*
+ * Save general application configuration automatically.
+ * File inputs are intentionally NOT saved because browsers
+ * do not allow localStorage to restore selected files.
+ */
+
+function saveGeneralConfiguration() {
+
+    const data = {
+
+        app_name:
+            form.elements["app_name"].value,
+
+        web_url:
+            form.elements["web_url"].value,
+
+        apk_name:
+            form.elements["apk_name"].value
+    };
+
+    const developerKey =
+        document.getElementById("developerKey").value;
+
+    saveSection(
+        "app",
+        data
+    );
+
+    saveSection(
+        "developer",
+        {
+            key: developerKey
+        }
+    );
+}
+
+/*
+ * ---------------------------------------------------------
+ * BOT SAVE / CLEAR
+ * ---------------------------------------------------------
+ */
+
+function saveBot(number) {
+
+    const prefix =
+        "bot" + number;
+
+    const values = {
+
+        name:
+            document.getElementById(
+                prefix + "Name"
+            ).value.trim(),
+
+        token:
+            document.getElementById(
+                prefix + "Token"
+            ).value.trim(),
+
+        chat_id:
+            document.getElementById(
+                prefix + "ChatId"
+            ).value.trim()
+    };
+
+    if (!values.token || !values.chat_id) {
+
+        alert(
+            "Bot " +
+            number +
+            " Token and Chat ID are required."
+        );
+
+        return;
+    }
+
+    saveSection(
+        "bot" + number,
+        values
+    );
+
+    markSaved(
+        "bot" + number + "Saved",
+        true
+    );
+}
+
+function clearBot(number) {
+
+    if (
+        !confirm(
+            "Clear saved Bot " +
+            number +
+            " configuration?"
+        )
+    ) {
+        return;
+    }
+
+    clearSection(
+        "bot" + number
+    );
+
+    document.getElementById(
+        "bot" + number + "Name"
+    ).value = "";
+
+    document.getElementById(
+        "bot" + number + "Token"
+    ).value = "";
+
+    document.getElementById(
+        "bot" + number + "ChatId"
+    ).value = "";
+
+    markSaved(
+        "bot" + number + "Saved",
+        false
+    );
+}
+
+document
+    .getElementById("saveBot1")
+    .addEventListener(
+        "click",
+        () => saveBot(1)
+    );
+
+document
+    .getElementById("saveBot2")
+    .addEventListener(
+        "click",
+        () => saveBot(2)
+    );
+
+document
+    .getElementById("clearBot1")
+    .addEventListener(
+        "click",
+        () => clearBot(1)
+    );
+
+document
+    .getElementById("clearBot2")
+    .addEventListener(
+        "click",
+        () => clearBot(2)
+    );
+
+document
+    .getElementById("clearAll")
+    .addEventListener(
+        "click",
+        function() {
+
+            if (
+                !confirm(
+                    "Clear ALL saved builder configuration from this browser?"
+                )
+            ) {
+                return;
+            }
+
+            localStorage.removeItem(
+                STORAGE_KEY
+            );
+
+            location.reload();
+        }
+    );
+
+/*
+ * ---------------------------------------------------------
+ * SHOW / HIDE PASSWORDS
+ * ---------------------------------------------------------
+ */
+
+document
+    .querySelectorAll(".show-btn")
+    .forEach(
+        function(btn) {
+
+            btn.addEventListener(
+                "click",
+                function() {
+
+                    const target =
+                        document.getElementById(
+                            btn.dataset.target
+                        );
+
+                    if (!target) {
+                        return;
+                    }
+
+                    if (
+                        target.type === "password"
+                    ) {
+
+                        target.type = "text";
+                        btn.textContent = "HIDE";
+
+                    } else {
+
+                        target.type = "password";
+                        btn.textContent = "SHOW";
+                    }
+                }
+            );
+        }
+    );
+
+/*
+ * ---------------------------------------------------------
+ * STATUS
+ * ---------------------------------------------------------
+ */
+
+function setStatus(value) {
+
+    const state =
+        String(value || "idle")
+            .toLowerCase();
+
+    let label =
+        state.toUpperCase();
+
+    if (state === "idle") {
+        label = "READY";
+    }
+
+    if (state === "building") {
+        label = "BUILDING";
+    }
+
+    if (state === "success") {
+        label = "SUCCESS";
+    }
+
+    if (state === "failed") {
+        label = "FAILED";
+    }
+
+    statusBox.textContent =
+        label;
+
+    statusBox.dataset.state =
+        state;
+}
 
 let polling = null;
-
-function escapeText(value) {
-    return value || "";
-}
 
 async function pollStatus() {
 
     try {
 
-        const response = await fetch(
-            "/status",
-            {
-                cache: "no-store"
-            }
+        const response =
+            await fetch(
+                "/status",
+                {
+                    cache: "no-store"
+                }
+            );
+
+        if (!response.ok) {
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        setStatus(
+            data.status
         );
 
-        const data = await response.json();
+        /*
+         * During a live /build stream the console is already
+         * receiving output. Status polling still keeps the UI
+         * correct when the page is reopened.
+         */
+        if (
+            data.status !== "building" ||
+            !logBox.textContent
+        ) {
 
-        statusBox.textContent = data.status;
-        logBox.textContent = data.log || "";
+            logBox.textContent =
+                data.log || "";
+        }
 
-        logBox.scrollTop = logBox.scrollHeight;
+        logBox.scrollTop =
+            logBox.scrollHeight;
 
-        if (data.status === "success") {
+        if (
+            data.status === "success"
+        ) {
 
             button.disabled = false;
-            button.textContent = "BUILD SIGNED APK";
+            button.textContent =
+                "⚡ BUILD SIGNED APK";
 
-            // Make download button visible.
-            downloadBox.style.display = "block";
+            downloadBox.style.display =
+                "block";
 
-            // Make sure the link points to the current APK.
-            downloadLink.href = "/download";
+            downloadLink.href =
+                "/download";
+
             downloadLink.setAttribute(
                 "download",
                 ""
             );
 
             if (polling) {
-                clearInterval(polling);
+
+                clearInterval(
+                    polling
+                );
+
                 polling = null;
             }
 
-        } else if (data.status === "failed") {
+        } else if (
+            data.status === "failed"
+        ) {
 
             button.disabled = false;
-            button.textContent = "BUILD SIGNED APK";
+            button.textContent =
+                "⚡ BUILD SIGNED APK";
 
-            downloadBox.style.display = "none";
+            downloadBox.style.display =
+                "none";
 
             if (polling) {
-                clearInterval(polling);
+
+                clearInterval(
+                    polling
+                );
+
                 polling = null;
             }
         }
 
     } catch (error) {
 
-        console.error(error);
+        console.warn(
+            "Status request failed.",
+            error
+        );
     }
 }
 
-form.addEventListener("submit", async function(event) {
+/*
+ * ---------------------------------------------------------
+ * BUILD
+ * ---------------------------------------------------------
+ */
 
-    event.preventDefault();
+form.addEventListener(
+    "submit",
+    async function(event) {
 
-    button.disabled = true;
-    button.textContent = "BUILDING...";
-    statusBox.textContent = "building";
-    logBox.textContent = "";
-    downloadBox.style.display = "none";
-
-    const formData = new FormData(form);
-
-    try {
+        event.preventDefault();
 
         /*
-         * Stream the build output directly from /build.
-         * This makes Gradle output appear live in the browser.
+         * Save the current configuration before building.
+         * This means the exact values used for the build
+         * will also be available next time.
          */
-        const response = await fetch("/build", {
-            method: "POST",
-            body: formData
-        });
+        saveGeneralConfiguration();
 
-        if (!response.ok) {
-            throw new Error(
-                "Build request failed: HTTP " +
-                response.status
+        saveSection(
+            "bot1",
+            {
+                name:
+                    document.getElementById(
+                        "bot1Name"
+                    ).value.trim(),
+
+                token:
+                    document.getElementById(
+                        "bot1Token"
+                    ).value.trim(),
+
+                chat_id:
+                    document.getElementById(
+                        "bot1ChatId"
+                    ).value.trim()
+            }
+        );
+
+        saveSection(
+            "bot2",
+            {
+                name:
+                    document.getElementById(
+                        "bot2Name"
+                    ).value.trim(),
+
+                token:
+                    document.getElementById(
+                        "bot2Token"
+                    ).value.trim(),
+
+                chat_id:
+                    document.getElementById(
+                        "bot2ChatId"
+                    ).value.trim()
+            }
+        );
+
+        markSaved(
+            "bot1Saved",
+            true
+        );
+
+        markSaved(
+            "bot2Saved",
+            true
+        );
+
+        button.disabled = true;
+        button.textContent =
+            "⏳ BUILDING RELEASE APK...";
+
+        setStatus(
+            "building"
+        );
+
+        logBox.textContent =
+            "Starting RTK release builder...\n";
+
+        downloadBox.style.display =
+            "none";
+
+        if (polling) {
+
+            clearInterval(
+                polling
             );
+
+            polling = null;
         }
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
+        const formData =
+            new FormData(form);
 
-        while (true) {
+        try {
 
-            const { value, done } =
-                await reader.read();
-
-            if (done) {
-                break;
-            }
-
-            const chunk =
-                decoder.decode(
-                    value,
-                    { stream: true }
+            const response =
+                await fetch(
+                    "/build",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
                 );
 
-            logBox.textContent += chunk;
+            if (!response.ok) {
 
-            logBox.scrollTop =
-                logBox.scrollHeight;
+                let message =
+                    "Build request failed: HTTP " +
+                    response.status;
+
+                try {
+
+                    const errorText =
+                        await response.text();
+
+                    if (errorText) {
+                        message +=
+                            "\n" +
+                            errorText;
+                    }
+
+                } catch (_) {}
+
+                throw new Error(
+                    message
+                );
+            }
+
+            if (!response.body) {
+
+                throw new Error(
+                    "Browser did not provide a build output stream."
+                );
+            }
+
+            const reader =
+                response.body.getReader();
+
+            const decoder =
+                new TextDecoder(
+                    "utf-8"
+                );
+
+            while (true) {
+
+                const result =
+                    await reader.read();
+
+                if (result.done) {
+                    break;
+                }
+
+                const chunk =
+                    decoder.decode(
+                        result.value,
+                        {
+                            stream: true
+                        }
+                    );
+
+                logBox.textContent +=
+                    chunk;
+
+                logBox.scrollTop =
+                    logBox.scrollHeight;
+            }
+
+            /*
+             * Give the backend a moment to publish final status,
+             * then fetch it.
+             */
+            await pollStatus();
+
+        } catch (error) {
+
+            setStatus(
+                "failed"
+            );
+
+            logBox.textContent +=
+                "\n\n===== BROWSER ERROR =====\n" +
+                String(error);
+
+            button.disabled = false;
+            button.textContent =
+                "⚡ BUILD SIGNED APK";
+
+            downloadBox.style.display =
+                "none";
+        }
+    }
+);
+
+/*
+ * ---------------------------------------------------------
+ * AUTO SAVE NON-SECRET APP SETTINGS
+ * ---------------------------------------------------------
+ */
+
+[
+    "apk_name",
+    "app_name",
+    "web_url"
+].forEach(
+    function(name) {
+
+        const field =
+            form.elements[name];
+
+        if (!field) {
+            return;
         }
 
-        // Get final status after stream closes.
-        await pollStatus();
-
-    } catch (error) {
-
-        statusBox.textContent = "failed";
-
-        logBox.textContent +=
-            "\n\n===== BROWSER ERROR =====\n" +
-            error;
-
-        button.disabled = false;
-        button.textContent = "BUILD SIGNED APK";
+        field.addEventListener(
+            "change",
+            saveGeneralConfiguration
+        );
     }
-});
+);
+
+document
+    .getElementById("developerKey")
+    .addEventListener(
+        "change",
+        saveGeneralConfiguration
+    );
+
+/*
+ * ---------------------------------------------------------
+ * INITIALIZE
+ * ---------------------------------------------------------
+ */
+
+restoreConfiguration();
 
 pollStatus();
+
+/*
+ * Refresh status every 2 seconds when necessary.
+ * This is mainly useful if the page is reopened while a
+ * build is already running.
+ */
+polling = setInterval(
+    pollStatus,
+    2000
+);
 
 </script>
 
 </body>
 </html>
 """
+
 
 
 class Handler(BaseHTTPRequestHandler):
